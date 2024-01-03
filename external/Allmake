@@ -1,0 +1,12 @@
+#!/bin/sh -e
+# Run from external directory
+cd "${0%/*}" || exit
+
+DEPENDENCIES="glfw"
+
+# Install dependencies
+for dep in ${DEPENDENCIES}; do
+    ./install-${dep}.sh
+done
+
+echo DONE >> .external_status

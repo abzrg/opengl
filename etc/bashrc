@@ -1,0 +1,30 @@
+#!/bin/sh -e
+
+# Project
+export GL_PROJECT="opengl"
+export GL_PROJECT_DIR="$HOME/git/projects/${GL_PROJECT}"  # <<< Edit this
+export GL_PROJECT_ETC_DIR="${GL_PROJECT_DIR}/etc"
+export GL_PROJECT_BUILD_DIR=${GL_PROJECT_DIR}/"build"
+export GL_PROJECT_SRC_DIR=${GL_PROJECT_DIR}/"src"
+export GL_PROJECT_SRC_BUILD_DIR="${GL_PROJECT_BUILD_DIR}/src"
+export GL_PROJECT_MAKE_DIR=${GL_PROJECT_DIR}/"make"
+
+# External Dependencies
+export EXTERNAL_DIR=${GL_PROJECT_DIR}/"external"
+export EXTERNAL_INST_DIR="${GL_PROJECT_BUILD_DIR}/external"
+export EXTERNAL_BUILD_DIR="${GL_PROJECT_BUILD_DIR}/external/build"
+
+# Specify the binary path
+export PATH="${GL_PROJECT_SRC_BUILD_DIR}:$PATH"
+
+# Source other configurations
+source ${GL_PROJECT_ETC_DIR}/config/glfw.sh
+
+glUnset() {
+    # https://stackoverflow.com/a/43126805/13041067
+    unset $(env | sed -n 's/^\(GL_PROJECT_.*\)=.*/\1/p')
+    unset $(env | sed -n 's/^\(EXTERNAL_.*\)=.*/\1/p')
+
+    # https://unix.stackexchange.com/a/108876/419393
+    export PATH=$(echo "$PATH" | sed -e 's|'"${GL_PROJECT_SRC_BUILD_DIR}"':||')
+}
